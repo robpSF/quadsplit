@@ -1,5 +1,21 @@
 import streamlit as st
 from PIL import Image
+import io
+import zipfile
+
+# Function to save images to a zip file
+def save_images_to_zip(img1, img2, img3, img4):
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+        img_list = [img1, img2, img3, img4]
+        names = ["Top-Left.png", "Top-Right.png", "Bottom-Left.png", "Bottom-Right.png"]
+        
+        for img, name in zip(img_list, names):
+            img_buffer = io.BytesIO()
+            img.save(img_buffer, format="PNG")
+            zip_file.writestr(name, img_buffer.getvalue())
+    
+    return zip_buffer.getvalue()
 
 # Load the image
 uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg", "webp"])
@@ -23,3 +39,13 @@ if uploaded_file is not None:
     st.image(img2, caption="Top-Right", use_column_width=True)
     st.image(img3, caption="Bottom-Left", use_column_width=True)
     st.image(img4, caption="Bottom-Right", use_column_width=True)
+
+    # Save images to a zip file and provide a download link
+    zip_data = save_images_to_zip(img1, img2, img3, img4)
+    
+    st.download_button(
+        label="Download Images as ZIP",
+        data=zip_data,
+        file_name="split_images.zip",
+        mime="application/zip"
+    )
