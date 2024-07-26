@@ -18,6 +18,10 @@ def save_images_to_zip(img1, img2, img3, img4):
     
     return zip_buffer.getvalue()
 
+# Set up the Streamlit app
+st.title("Image Splitter")
+st.header("Upload an Image and Download the Split Parts as a ZIP File")
+
 # Load the image
 uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg", "webp"])
 
