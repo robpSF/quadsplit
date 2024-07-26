@@ -11,6 +11,7 @@ def save_images_to_zip(img1, img2, img3, img4):
         names = ["Top-Left.png", "Top-Right.png", "Bottom-Left.png", "Bottom-Right.png"]
         
         for img, name in zip(img_list, names):
+            img = img.resize((500, 500))  # Resize image to 500x500
             img_buffer = io.BytesIO()
             img.save(img_buffer, format="PNG")
             zip_file.writestr(name, img_buffer.getvalue())
@@ -35,10 +36,10 @@ if uploaded_file is not None:
     img4 = image.crop((width//2, height//2, width, height))
 
     st.write("Split Images:")
-    st.image(img1, caption="Top-Left", use_column_width=True)
-    st.image(img2, caption="Top-Right", use_column_width=True)
-    st.image(img3, caption="Bottom-Left", use_column_width=True)
-    st.image(img4, caption="Bottom-Right", use_column_width=True)
+    st.image(img1.resize((500, 500)), caption="Top-Left", use_column_width=True)
+    st.image(img2.resize((500, 500)), caption="Top-Right", use_column_width=True)
+    st.image(img3.resize((500, 500)), caption="Bottom-Left", use_column_width=True)
+    st.image(img4.resize((500, 500)), caption="Bottom-Right", use_column_width=True)
 
     # Save images to a zip file and provide a download link
     zip_data = save_images_to_zip(img1, img2, img3, img4)
